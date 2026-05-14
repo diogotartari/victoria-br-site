@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+:root {
+  /* CORES PRINCIPAIS VICTORIA BR */
+  --victoria-green: #2d5016;
+  --victoria-red: #c41e3a;
+  --victoria-gold: #ffd700;
+  --victoria-black: #0a0a0a;
+  --victoria-white: #fefefe;
+
+  /* GRADIENTES CINEMATOGRÁFICOS */
+  --gradient-hero: linear-gradient(135deg, #2d5016 0%, #c41e3a 100%);
+  --gradient-gold: linear-gradient(45deg, #ffd700 0%, #ffa500 100%);
+  --gradient-dark: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+
+  /* NEON / GLOW */
+  --glow-green: 0 0 20px #2d501650;
+  --glow-red: 0 0 20px #c41e3a50;
+  --glow-gold: 0 0 30px #ffd70080;
+
+  /* Base app (alinhado à marca) */
+  --background: var(--victoria-black);
+  --foreground: var(--victoria-white);
+
+  /* Aliases legados → tokens oficiais (componentes existentes) */
+  --vbr-red: var(--victoria-red);
+  --vbr-red-deep: #7f0d18;
+  --vbr-green: #041810;
+  --vbr-green-bright: var(--victoria-green);
+  --vbr-gold: #d4af37;
+
+  /* Brasão: verde floresta profundo (bordas / fundos) */
+  --victoria-green-deep: #143214;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-victoria-green: var(--victoria-green);
+  --color-victoria-red: var(--victoria-red);
+  --color-victoria-gold: var(--victoria-gold);
+  --color-victoria-black: var(--victoria-black);
+  --color-victoria-white: var(--victoria-white);
+  --color-victoria-green-deep: var(--victoria-green-deep);
+  --color-victoria-red-deep: var(--vbr-red-deep);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --shadow-victoria-green: var(--glow-green);
+  --shadow-victoria-red: var(--glow-red);
+  --shadow-victoria-gold: var(--glow-gold);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  overflow-x: hidden;
+}
+
+@utility font-display {
+  /* Archivo Black via next/font → --font-display no layout */
+  font-family: var(--font-display), ui-sans-serif, system-ui, sans-serif;
+}
+
+@utility bg-gradient-victoria-hero {
+  background-image: var(--gradient-hero);
+}
+
+@utility bg-gradient-victoria-gold {
+  background-image: var(--gradient-gold);
+}
+
+@utility bg-gradient-victoria-dark {
+  background-image: var(--gradient-dark);
+}
+
+@utility shadow-glow-green {
+  box-shadow: var(--glow-green);
+}
+
+@utility shadow-glow-red {
+  box-shadow: var(--glow-red);
+}
+
+@utility shadow-glow-gold {
+  box-shadow: var(--glow-gold);
+}
+
+/** Fundo escuro premium com toque mínimo de verde Victoria (sem textura “gamer”). */
+@utility bg-crest-motif {
+  background-color: #050505;
+  background-image: radial-gradient(
+    ellipse 120% 80% at 50% 0%,
+    color-mix(in srgb, var(--victoria-green) 10%, transparent),
+    transparent 55%
+  );
+}
+
+::selection {
+  background: color-mix(in srgb, var(--victoria-red) 38%, transparent);
+  color: var(--victoria-white);
+}
