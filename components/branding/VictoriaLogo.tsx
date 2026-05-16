@@ -12,9 +12,9 @@ const sizeMap: Record<
   { width: number; height: number; className: string }
 > = {
   navbar: {
-    width: 160,
-    height: 200,
-    className: "h-10 w-auto max-h-11 sm:h-12 sm:max-h-14",
+    width: 180,
+    height: 180,
+    className: "shrink-0",
   },
   footer: {
     width: 120,
@@ -43,7 +43,7 @@ export function VictoriaLogo({ size, className = "", priority }: VictoriaLogoPro
       width={s.width}
       height={s.height}
       priority={priority}
-      sizes={size === "navbar" ? "140px" : "120px"}
+      sizes={size === "navbar" ? "180px" : "120px"}
       className={`object-contain object-left-top ${s.className} ${className}`.trim()}
     />
   );

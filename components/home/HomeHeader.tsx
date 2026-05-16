@@ -1,10 +1,10 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useEffect, useId, useState, type MouseEvent } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Menu, MessageCircle, X } from "lucide-react";
-import { VictoriaLogo } from "@/components/branding/VictoriaLogo";
-import { buildVictoriaWhatsAppUrl, trackWhatsAppClick } from "@/utils/whatsapp";
+import { useLeadModal } from "@/components/leads/LeadModalContext";
 
 const LINKS = [
   { href: "#topo", label: "Início" },
@@ -16,6 +16,7 @@ const LINKS = [
 
 export function HomeHeader() {
   const reducedMotion = useReducedMotion();
+  const { openLeadModal } = useLeadModal();
   const [open, setOpen] = useState(false);
   const panelId = useId();
 
@@ -59,7 +60,14 @@ export function HomeHeader() {
       <div className="mx-auto flex h-16 min-w-0 max-w-[1440px] items-center justify-between gap-3 px-5 sm:px-8 lg:grid lg:h-16 lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:px-10">
         <a href="#topo" className="flex min-w-0 items-center gap-3 lg:justify-self-start">
           <span className="shrink-0">
-            <VictoriaLogo size="navbar" priority />
+            <Image
+              src="/logo.png"
+              alt="Victoria Brasileira"
+              width={180}
+              height={180}
+              className="h-24 w-auto object-contain"
+              priority
+            />
           </span>
           <span className="hidden min-w-0 flex-col leading-tight sm:flex">
             <span className="font-display text-[11px] font-black uppercase tracking-[0.18em] text-[#C41E3A]">
@@ -110,12 +118,10 @@ export function HomeHeader() {
             <span className="sr-only">Menu</span>
           </button>
 
-          <motion.a
-            href={buildVictoriaWhatsAppUrl("navbar_whatsapp")}
-            target="_blank"
-            rel="noopener noreferrer"
+          <motion.button
+            type="button"
             onClick={() => {
-              trackWhatsAppClick("navbar_whatsapp");
+              openLeadModal("Topo — Peça pelo WhatsApp", "navbar_whatsapp");
               setOpen(false);
             }}
             whileHover={reducedMotion ? undefined : { scale: 1.02 }}
@@ -124,7 +130,7 @@ export function HomeHeader() {
           >
             <MessageCircle className="h-4 w-4" strokeWidth={2} aria-hidden />
             Peça pelo WhatsApp
-          </motion.a>
+          </motion.button>
         </div>
       </div>
 
@@ -151,19 +157,17 @@ export function HomeHeader() {
                   {l.label}
                 </a>
               ))}
-              <a
-                href={buildVictoriaWhatsAppUrl("navbar_whatsapp")}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-3 flex items-center justify-center gap-2 rounded-full border border-[#00A859] py-3 text-sm font-semibold uppercase tracking-wide text-white"
+              <button
+                type="button"
+                className="mt-3 flex w-full items-center justify-center gap-2 rounded-full border border-[#00A859] py-3 text-sm font-semibold uppercase tracking-wide text-white"
                 onClick={() => {
-                  trackWhatsAppClick("navbar_whatsapp");
+                  openLeadModal("Topo — Peça pelo WhatsApp", "navbar_whatsapp");
                   setOpen(false);
                 }}
               >
                 <MessageCircle className="h-4 w-4" />
                 Peça pelo WhatsApp
-              </a>
+              </button>
             </nav>
           </motion.div>
         )}

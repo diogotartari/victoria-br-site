@@ -3,8 +3,8 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { MessageCircle, Star } from "lucide-react";
 import Link from "next/link";
+import { useLeadModal } from "@/components/leads/LeadModalContext";
 import { INSTAGRAM_URL, InstagramLogoMark, trackInstagramClick } from "@/components/SocialIntegration";
-import { buildVictoriaWhatsAppUrl, trackWhatsAppClick } from "@/utils/whatsapp";
 
 const sobreFade = {
   hidden: { opacity: 0, y: 22 },
@@ -76,6 +76,7 @@ function StarRow({ count }: { count: number }) {
 
 export function HomeNavTargets() {
   const reducedMotion = useReducedMotion();
+  const { openLeadModal } = useLeadModal();
 
   return (
     <>
@@ -225,16 +226,14 @@ export function HomeNavTargets() {
               Pedidos, combos e logística direto nas nossas redes sociais.
             </p>
             <div className="mt-6 flex flex-col items-center gap-3">
-              <a
-                href={buildVictoriaWhatsAppUrl("final_cta")}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={() => trackWhatsAppClick("final_cta")}
-                className="inline-flex w-full max-w-xs items-center justify-center gap-2 rounded-full bg-[#00e676] px-8 py-3.5 text-sm font-bold uppercase tracking-wide text-black shadow-[0_0_28px_rgba(0,230,118,0.35)] sm:w-auto sm:max-w-none"
+              <button
+                type="button"
+                onClick={() => openLeadModal("Rodapé — Contato / WhatsApp", "final_cta")}
+                className="inline-flex w-full max-w-xs cursor-pointer items-center justify-center gap-2 rounded-full bg-[#00e676] px-8 py-3.5 text-sm font-bold uppercase tracking-wide text-black shadow-[0_0_28px_rgba(0,230,118,0.35)] sm:w-auto sm:max-w-none"
               >
                 <MessageCircle className="h-4 w-4" strokeWidth={2.25} aria-hidden />
                 WhatsApp
-              </a>
+              </button>
               <a
                 href={INSTAGRAM_URL}
                 target="_blank"

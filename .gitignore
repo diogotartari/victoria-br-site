@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# leads capturados (dados pessoais; gerado em runtime)
+/data/leads.xlsx

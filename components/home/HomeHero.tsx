@@ -4,7 +4,7 @@ import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Award, ChefHat, LayoutGrid, Leaf, MessageCircle } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { buildVictoriaWhatsAppUrl, trackWhatsAppClick } from "@/utils/whatsapp";
+import { useLeadModal } from "@/components/leads/LeadModalContext";
 
 const COXITO = "/coxito.png";
 
@@ -236,6 +236,7 @@ function CoxitoStage({ reducedMotion }: { reducedMotion: boolean | null }) {
 
 export function HomeHero() {
   const reducedMotion = useReducedMotion();
+  const { openLeadModal } = useLeadModal();
 
   return (
     <section
@@ -313,19 +314,21 @@ export function HomeHero() {
             {...(reducedMotion ? {} : { variants: item })}
             className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center"
           >
-            <motion.a
-              href={buildVictoriaWhatsAppUrl("hero_fazer_pedido")}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => trackWhatsAppClick("hero_fazer_pedido")}
+            <motion.div
               whileHover={reducedMotion ? undefined : { scale: 1.03 }}
               whileTap={reducedMotion ? undefined : { scale: 0.98 }}
-              className="inline-flex items-center justify-center gap-2.5 rounded-full px-9 py-4 text-sm font-bold uppercase tracking-[0.14em] text-white shadow-[0_0_40px_rgba(0,168,89,0.35)]"
-              style={{ backgroundColor: BR_GREEN }}
+              className="inline-flex"
             >
-              <MessageCircle className="h-5 w-5" strokeWidth={2.25} aria-hidden />
-              Fazer Pedido
-            </motion.a>
+              <button
+                type="button"
+                onClick={() => openLeadModal("Hero — Fazer pedido", "hero_fazer_pedido")}
+                className="inline-flex cursor-pointer items-center justify-center gap-2.5 rounded-full px-9 py-4 text-sm font-bold uppercase tracking-[0.14em] text-white shadow-[0_0_40px_rgba(0,168,89,0.35)]"
+                style={{ backgroundColor: BR_GREEN }}
+              >
+                <MessageCircle className="h-5 w-5" strokeWidth={2.25} aria-hidden />
+                Fazer Pedido
+              </button>
+            </motion.div>
             <motion.a
               href="#galeria"
               whileHover={reducedMotion ? undefined : { scale: 1.02 }}
