@@ -64,6 +64,10 @@ export function LeadOrderModal({ open, origin: _origin, waSource, onClose }: Pro
       pedidoDesejado,
     });
     const whatsappUrl = buildVictoriaWhatsAppUrlFromPlainMessage(msg);
+    const whatsappWindow = window.open("", "_blank");
+    if (whatsappWindow) {
+      whatsappWindow.opener = null;
+    }
 
     try {
       const res = await fetch("/api/leads", {
@@ -96,9 +100,8 @@ export function LeadOrderModal({ open, origin: _origin, waSource, onClose }: Pro
 
     setPhase("success");
     trackWhatsAppClick(waSource);
-    const whatsappWindow = window.open(whatsappUrl, "_blank");
     if (whatsappWindow) {
-      whatsappWindow.opener = null;
+      whatsappWindow.location.href = whatsappUrl;
     } else {
       window.location.href = whatsappUrl;
     }

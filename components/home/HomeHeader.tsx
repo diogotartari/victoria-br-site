@@ -68,7 +68,7 @@ export function HomeHeader() {
               alt="Victoria Brasileira"
               width={180}
               height={180}
-              className="h-24 w-auto object-contain"
+              className="h-24 max-h-full w-auto object-contain"
               priority
             />
           </span>

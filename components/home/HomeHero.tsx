@@ -314,17 +314,17 @@ export function HomeHero() {
 
           <motion.div
             {...(reducedMotion ? {} : { variants: item })}
-            className="mt-10 flex items-center justify-center gap-3 lg:justify-start"
+            className="mt-10 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
           >
             <motion.div
               whileHover={reducedMotion ? undefined : { scale: 1.03 }}
               whileTap={reducedMotion ? undefined : { scale: 0.98 }}
-              className="flex h-14 w-[180px]"
+              className="flex h-14 min-w-[180px]"
             >
               <button
                 type="button"
                 onClick={() => openLeadModal("Hero — Fazer pedido", "hero_fazer_pedido")}
-                className="flex h-14 w-[180px] cursor-pointer items-center justify-center gap-2.5 rounded-full text-sm font-bold uppercase tracking-[0.14em] text-white shadow-[0_0_40px_rgba(0,168,89,0.35)]"
+                className="flex h-14 min-w-[180px] cursor-pointer items-center justify-center gap-2.5 rounded-full text-sm font-bold uppercase tracking-[0.14em] text-white shadow-[0_0_40px_rgba(0,168,89,0.35)]"
                 style={{ backgroundColor: BR_GREEN }}
               >
                 <MessageCircle className="h-5 w-5" strokeWidth={2.25} aria-hidden />
@@ -335,7 +335,7 @@ export function HomeHero() {
               href="#galeria"
               whileHover={reducedMotion ? undefined : { scale: 1.02 }}
               whileTap={reducedMotion ? undefined : { scale: 0.98 }}
-              className="flex h-14 w-[180px] items-center justify-center gap-2.5 rounded-full border-2 bg-transparent text-sm font-bold uppercase tracking-[0.12em] backdrop-blur-sm transition hover:brightness-110"
+              className="flex h-14 min-w-[180px] items-center justify-center gap-2.5 rounded-full border-2 bg-transparent text-sm font-bold uppercase tracking-[0.12em] backdrop-blur-sm transition hover:brightness-110"
               style={{ borderColor: GOLD, color: GOLD }}
             >
               <LayoutGrid className="h-5 w-5" strokeWidth={1.75} style={{ color: GOLD }} aria-hidden />
@@ -347,7 +347,7 @@ export function HomeHero() {
               rel="noopener noreferrer"
               whileHover={reducedMotion ? undefined : { scale: 1.02 }}
               whileTap={reducedMotion ? undefined : { scale: 0.98 }}
-              className="flex h-14 w-[180px] items-center justify-center rounded-full border-2 border-[#EA1D2C] bg-[#EA1D2C] text-sm font-bold uppercase tracking-[0.12em] text-white backdrop-blur-sm transition hover:brightness-110"
+              className="flex h-14 min-w-[180px] items-center justify-center rounded-full border-2 border-[#EA1D2C] bg-[#EA1D2C] text-sm font-bold uppercase tracking-[0.12em] text-white backdrop-blur-sm transition hover:brightness-110"
             >
               iFood
             </motion.a>
