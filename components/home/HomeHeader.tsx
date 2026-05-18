@@ -14,6 +14,9 @@ const LINKS = [
   { href: "#contato", label: "Contato" },
 ] as const;
 
+const IFOOD_URL =
+  "https://www.ifood.com.br/delivery/sao-paulo-sp/victoria--br-salgados-parque-mandaqui/d67f87f4-95b0-4c9c-8bb5-b474450a3297?utm_medium=share";
+
 export function HomeHeader() {
   const reducedMotion = useReducedMotion();
   const { openLeadModal } = useLeadModal();
@@ -57,8 +60,8 @@ export function HomeHeader() {
 
   return (
     <header className="fixed inset-x-0 top-0 z-[100] max-w-[100vw] border-b border-white/[0.06] bg-black/55 backdrop-blur-2xl">
-      <div className="mx-auto flex h-16 min-w-0 max-w-[1440px] items-center justify-between gap-3 px-5 sm:px-8 lg:grid lg:h-16 lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:px-10">
-        <a href="#topo" className="flex min-w-0 items-center gap-3 lg:justify-self-start">
+      <div className="mx-auto flex h-28 min-w-0 max-w-[1440px] items-center justify-between gap-3 px-5 sm:px-8 lg:grid lg:h-28 lg:grid-cols-[1fr_auto_1fr] lg:items-center lg:px-10">
+        <a href="#topo" className="flex h-full min-w-0 items-center gap-3 self-center lg:justify-self-start">
           <span className="shrink-0">
             <Image
               src="/logo.png"
@@ -81,7 +84,7 @@ export function HomeHeader() {
         </a>
 
         <nav
-          className="hidden items-center justify-center gap-9 lg:flex lg:justify-self-center"
+          className="hidden h-full items-center justify-center gap-9 self-center lg:flex lg:justify-self-center"
           aria-label="Principal"
         >
           {LINKS.map((l, i) => {
@@ -106,7 +109,7 @@ export function HomeHeader() {
           })}
         </nav>
 
-        <div className="flex items-center justify-end gap-2 justify-self-end">
+        <div className="flex h-full items-center justify-end gap-3 self-center justify-self-end">
           <button
             type="button"
             className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 text-zinc-200 lg:hidden"
@@ -117,6 +120,23 @@ export function HomeHeader() {
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             <span className="sr-only">Menu</span>
           </button>
+
+          <motion.a
+            href={IFOOD_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            whileHover={reducedMotion ? undefined : { scale: 1.02 }}
+            whileTap={reducedMotion ? undefined : { scale: 0.98 }}
+            className="hidden items-center gap-2 rounded-full border border-[#EA1D2C] bg-transparent px-5 py-2.5 text-[12px] font-semibold uppercase tracking-[0.1em] text-white shadow-[0_0_24px_rgba(234,29,44,0.14)] transition hover:bg-[#EA1D2C]/10 lg:inline-flex"
+          >
+            <span
+              className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-[#EA1D2C] text-[9px] font-black leading-none text-white"
+              aria-hidden
+            >
+              iF
+            </span>
+            iFood
+          </motion.a>
 
           <motion.button
             type="button"

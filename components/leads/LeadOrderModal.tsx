@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useId, useState, type FormEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Check, Loader2, MessageCircle, X } from "lucide-react";
 import { LEAD_FIELD_LIMITS, type LeadWaSource } from "@/lib/lead-types";
@@ -24,6 +24,11 @@ export function LeadOrderModal({ open, origin: _origin, waSource, onClose }: Pro
   const [mensagem, setMensagem] = useState("");
   const [phase, setPhase] = useState<"idle" | "submitting" | "success">("idle");
 
+  const closeModal = useCallback(() => {
+    setPhase("idle");
+    onClose();
+  }, [onClose]);
+
   useEffect(() => {
     if (!open) return;
     setNome("");
@@ -36,11 +41,11 @@ export function LeadOrderModal({ open, origin: _origin, waSource, onClose }: Pro
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") closeModal();
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
+  }, [closeModal, open]);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -101,7 +106,7 @@ export function LeadOrderModal({ open, origin: _origin, waSource, onClose }: Pro
       window.location.href = whatsappUrl;
     }
     window.setTimeout(() => {
-      onClose();
+      closeModal();
     }, 900);
   }
 
@@ -120,7 +125,7 @@ export function LeadOrderModal({ open, origin: _origin, waSource, onClose }: Pro
           className="fixed inset-0 z-[200] flex items-end justify-center bg-black/75 p-4 pb-8 backdrop-blur-md sm:items-center sm:pb-4"
           role="presentation"
           onMouseDown={(ev) => {
-            if (ev.target === ev.currentTarget) onClose();
+            if (ev.target === ev.currentTarget) closeModal();
           }}
         >
           <motion.div
@@ -144,8 +149,9 @@ export function LeadOrderModal({ open, origin: _origin, waSource, onClose }: Pro
             />
             <button
               type="button"
-              onClick={onClose}
-              className="absolute right-3 top-3 rounded-full p-2 text-zinc-500 transition hover:bg-white/[0.06] hover:text-white"
+              onMouseDown={(e) => e.stopPropagation()}
+              onClick={closeModal}
+              className="absolute right-3 top-3 z-20 rounded-full p-2 text-zinc-500 transition hover:bg-white/[0.06] hover:text-white"
               aria-label="Fechar"
             >
               <X className="h-5 w-5" />
