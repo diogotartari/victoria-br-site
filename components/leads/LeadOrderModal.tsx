@@ -22,8 +22,7 @@ export function LeadOrderModal({ open, origin: _origin, waSource, onClose }: Pro
   const [telefone, setTelefone] = useState("");
   const [produto, setProduto] = useState("");
   const [mensagem, setMensagem] = useState("");
-  const [phase, setPhase] = useState<"idle" | "submitting" | "success" | "error">("idle");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [phase, setPhase] = useState<"idle" | "submitting" | "success">("idle");
 
   useEffect(() => {
     if (!open) return;
@@ -32,7 +31,6 @@ export function LeadOrderModal({ open, origin: _origin, waSource, onClose }: Pro
     setProduto("");
     setMensagem("");
     setPhase("idle");
-    setErrorMsg("");
   }, [open]);
 
   useEffect(() => {
@@ -46,8 +44,15 @@ export function LeadOrderModal({ open, origin: _origin, waSource, onClose }: Pro
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
-    setErrorMsg("");
     setPhase("submitting");
+
+    const pedidoDesejado = [produto.trim(), mensagem.trim()].filter(Boolean).join("\n\n");
+    const msg = buildVictoriaOrderWaMessage({
+      nome: nome.trim(),
+      telefone: telefone.trim(),
+      pedidoDesejado,
+    });
+
     try {
       const res = await fetch("/api/leads", {
         method: "POST",
@@ -59,28 +64,29 @@ export function LeadOrderModal({ open, origin: _origin, waSource, onClose }: Pro
           mensagem: mensagem.slice(0, LEAD_FIELD_LIMITS.mensagem),
         }),
       });
-      const data = (await res.json()) as { ok?: boolean; error?: string };
-      if (!res.ok || !data.ok) {
-        setPhase("error");
-        setErrorMsg(data.error ?? "Não foi possível salvar. Tente de novo.");
-        return;
+
+      if (!res.ok) {
+        const responseText = await res.text().catch(() => "");
+        console.error("[LeadOrderModal] Falha ao salvar lead", {
+          status: res.status,
+          response: responseText,
+        });
+      } else {
+        const data = (await res.json().catch(() => null)) as { ok?: boolean; error?: string } | null;
+        if (!data?.ok) {
+          console.error("[LeadOrderModal] API de leads retornou falha", data);
+        }
       }
-      setPhase("success");
-      trackWhatsAppClick(waSource);
-      const pedidoDesejado = [produto.trim(), mensagem.trim()].filter(Boolean).join("\n\n");
-      const msg = buildVictoriaOrderWaMessage({
-        nome: nome.trim(),
-        telefone: telefone.trim(),
-        pedidoDesejado,
-      });
-      window.open(buildVictoriaWhatsAppUrlFromPlainMessage(msg), "_blank", "noopener,noreferrer");
-      window.setTimeout(() => {
-        onClose();
-      }, 900);
-    } catch {
-      setPhase("error");
-      setErrorMsg("Erro de conexão. Verifique a internet e tente novamente.");
+    } catch (error) {
+      console.error("[LeadOrderModal] Erro ao salvar lead", error);
     }
+
+    setPhase("success");
+    trackWhatsAppClick(waSource);
+    window.open(buildVictoriaWhatsAppUrlFromPlainMessage(msg), "_blank", "noopener,noreferrer");
+    window.setTimeout(() => {
+      onClose();
+    }, 900);
   }
 
   const inputClass =
@@ -152,7 +158,7 @@ export function LeadOrderModal({ open, origin: _origin, waSource, onClose }: Pro
                     <Check className="h-7 w-7" strokeWidth={2.5} />
                   </div>
                   <p className="font-display text-lg font-semibold text-white">Tudo certo!</p>
-                  <p className="text-sm text-zinc-400">Abrindo o WhatsApp…</p>
+                  <p className="text-sm text-zinc-400">Estamos abrindo seu WhatsApp para finalizar seu pedido 👋</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="mt-6 space-y-4">
@@ -214,10 +220,6 @@ export function LeadOrderModal({ open, origin: _origin, waSource, onClose }: Pro
                       placeholder="Quantidade, data do evento, endereço…"
                     />
                   </div>
-
-                  {phase === "error" && errorMsg ? (
-                    <p className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-200">{errorMsg}</p>
-                  ) : null}
 
                   <button
                     type="submit"
