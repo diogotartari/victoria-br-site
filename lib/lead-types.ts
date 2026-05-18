@@ -1,9 +1,10 @@
 export type LeadWaSource = "hero_fazer_pedido" | "final_cta" | "navbar_whatsapp";
 
-/** Campos aceitos no POST (produto é opcional e entra na coluna mensagem). */
+/** Campos aceitos no POST. */
 export type LeadPayload = {
   nome: string;
   telefone: string;
+  produto: string;
   mensagem: string;
 };
 
@@ -11,6 +12,7 @@ export type LeadPayload = {
 export type LeadRow = {
   nome: string;
   telefone: string;
+  produto: string;
   mensagem: string;
   horario: string;
 };

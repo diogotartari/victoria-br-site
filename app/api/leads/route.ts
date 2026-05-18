@@ -29,15 +29,11 @@ function parseLead(body: unknown): LeadRow | null {
   if (!nome || !telefone) return null;
   const produto = sanitize(o.produto, LEAD_FIELD_LIMITS.produto);
   const mensagemLivre = sanitize(o.mensagem, LEAD_FIELD_LIMITS.mensagem);
-  const blocos = [
-    produto ? `Produto / interesse: ${produto}` : "",
-    mensagemLivre ? mensagemLivre : "",
-  ].filter(Boolean);
-  const mensagem = blocos.join("\n\n");
   return {
     nome,
     telefone,
-    mensagem,
+    produto,
+    mensagem: mensagemLivre,
     horario: formatHorarioBr(),
   };
 }
