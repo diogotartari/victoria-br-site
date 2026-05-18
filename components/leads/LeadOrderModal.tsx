@@ -52,6 +52,11 @@ export function LeadOrderModal({ open, origin: _origin, waSource, onClose }: Pro
       telefone: telefone.trim(),
       pedidoDesejado,
     });
+    const whatsappUrl = buildVictoriaWhatsAppUrlFromPlainMessage(msg);
+    const whatsappWindow = window.open("", "_blank");
+    if (whatsappWindow) {
+      whatsappWindow.opener = null;
+    }
 
     try {
       const res = await fetch("/api/leads", {
@@ -83,7 +88,11 @@ export function LeadOrderModal({ open, origin: _origin, waSource, onClose }: Pro
 
     setPhase("success");
     trackWhatsAppClick(waSource);
-    window.open(buildVictoriaWhatsAppUrlFromPlainMessage(msg), "_blank", "noopener,noreferrer");
+    if (whatsappWindow) {
+      whatsappWindow.location.href = whatsappUrl;
+    } else {
+      window.location.href = whatsappUrl;
+    }
     window.setTimeout(() => {
       onClose();
     }, 900);
