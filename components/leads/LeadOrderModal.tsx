@@ -42,14 +42,20 @@ export function LeadOrderModal({ open, origin: _origin, waSource, onClose }: Pro
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
-  async function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setPhase("submitting");
 
-    const pedidoDesejado = [produto.trim(), mensagem.trim()].filter(Boolean).join("\n\n");
+    const formData = new FormData(e.currentTarget);
+    const submittedNome = String(formData.get("nome") ?? "").trim().slice(0, LEAD_FIELD_LIMITS.nome);
+    const submittedTelefone = String(formData.get("telefone") ?? "").trim().slice(0, LEAD_FIELD_LIMITS.telefone);
+    const submittedProduto = String(formData.get("produto") ?? "").trim().slice(0, LEAD_FIELD_LIMITS.produto);
+    const submittedMensagem = String(formData.get("mensagem") ?? "").trim().slice(0, LEAD_FIELD_LIMITS.mensagem);
+
+    const pedidoDesejado = [submittedProduto, submittedMensagem].filter(Boolean).join("\n\n");
     const msg = buildVictoriaOrderWaMessage({
-      nome: nome.trim(),
-      telefone: telefone.trim(),
+      nome: submittedNome,
+      telefone: submittedTelefone,
       pedidoDesejado,
     });
     const whatsappUrl = buildVictoriaWhatsAppUrlFromPlainMessage(msg);
@@ -62,11 +68,12 @@ export function LeadOrderModal({ open, origin: _origin, waSource, onClose }: Pro
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        keepalive: true,
         body: JSON.stringify({
-          nome: nome.slice(0, LEAD_FIELD_LIMITS.nome),
-          telefone: telefone.slice(0, LEAD_FIELD_LIMITS.telefone),
-          produto: produto.slice(0, LEAD_FIELD_LIMITS.produto),
-          mensagem: mensagem.slice(0, LEAD_FIELD_LIMITS.mensagem),
+          nome: submittedNome,
+          telefone: submittedTelefone,
+          produto: submittedProduto,
+          mensagem: submittedMensagem,
         }),
       });
 
@@ -177,6 +184,7 @@ export function LeadOrderModal({ open, origin: _origin, waSource, onClose }: Pro
                     </label>
                     <input
                       id={`${baseId}-nome`}
+                      name="nome"
                       required
                       autoComplete="name"
                       maxLength={LEAD_FIELD_LIMITS.nome}
@@ -192,6 +200,7 @@ export function LeadOrderModal({ open, origin: _origin, waSource, onClose }: Pro
                     </label>
                     <input
                       id={`${baseId}-tel`}
+                      name="telefone"
                       required
                       type="tel"
                       autoComplete="tel"
@@ -208,6 +217,7 @@ export function LeadOrderModal({ open, origin: _origin, waSource, onClose }: Pro
                     </label>
                     <input
                       id={`${baseId}-prod`}
+                      name="produto"
                       maxLength={LEAD_FIELD_LIMITS.produto}
                       value={produto}
                       onChange={(e) => setProduto(e.target.value)}
@@ -221,6 +231,7 @@ export function LeadOrderModal({ open, origin: _origin, waSource, onClose }: Pro
                     </label>
                     <textarea
                       id={`${baseId}-msg`}
+                      name="mensagem"
                       rows={3}
                       maxLength={LEAD_FIELD_LIMITS.mensagem}
                       value={mensagem}
